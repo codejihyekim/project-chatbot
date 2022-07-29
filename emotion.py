@@ -119,8 +119,6 @@ class Emotion:
                             test_eval.append("슬프시군요 ")
 
                     res = ""
-                    '''if test_eval[0] == "행복하시군요 ":
-                        res = '행복한 기분을 위해 ' + random.choice(happy_music) + " 를 들려드릴게요"'''
                     if test_eval[0] == "행복하시군요 ":
                         res = '행복한 기분을 위해 ' + random.choice(happy_music) + " 를 들려드릴게요"
                     elif test_eval[0] == "슬프시군요 ":
@@ -136,8 +134,10 @@ class Emotion:
                     Tts.run(input_text=res)
                     if test_eval[0] == "행복하시군요 ":
                         playsound('music_mp3/nabillera.mp3')
+                        print('음악이 재생 되는 중')
                     elif test_eval[0] == "슬프시군요 ":
                         playsound('music_mp3/adult.mp3')
+                        print('음악이 재생 되는 중')
                 break
 
 if __name__ == '__main__':
