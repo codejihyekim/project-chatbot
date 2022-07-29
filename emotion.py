@@ -40,7 +40,6 @@ class BERTClassifier(nn.Module):
             out = self.dropout(pooler)
         return self.classifier(out)
 
-
 class BERTDataset(Dataset):
     def __init__(self, dataset, sent_idx, label_idx, bert_tokenizer, max_len,
                  pad, pair):
@@ -96,22 +95,12 @@ class Emotion:
                     out = model(token_ids, valid_length, segment_ids)
 
                     happy_music = ['나빌레라']
-                    sad_music = ['나의 사춘기에게', '꽃길', '이별후회', '한숨', '어른']
+                    sad_music = ['어른']
+                    #sad_music = ['나의 사춘기에게', '꽃길', '이별후회', '한숨', '어른']
                     #happy_music = ['나빌레라', '빨간 맛', '딩가딩가', '상상더하기', '마지막처럼']
                     angry_music = ['그건 니 생각이고', '대취타', '내가 제일 잘나가', '닥쳐줘요', '보여줄게']
                     unrest_music = ['도망가자', '혼자라고 생각말기', '괜찮아요', '마음을 드려요', '아프지 말고 아프지 말자']
                     embar_music = ['밤편지', '양화대교', '무릎', '서울의 잠 못 이루는 밤', '밝게 빛나는 별이 되어 비춰줄게']
-                    
-                    '''sad_music = {'꽃길':'https://www.youtube.com/watch?v=oYiIbzEDGe4', '이별후회':'https://www.youtube.com/watch?v=TiNHJ7JDA3M',
-                                '한숨':'https://www.youtube.com/watch?v=5iSlfF8TQ9k', '어른':'https://www.youtube.com/watch?v=f2Pee5hnO-E', '나의 사춘기에게':'https://www.youtube.com/watch?v=0tkgGcnRNTE'}
-                    happy_music = {'여름여름해':'https://www.youtube.com/watch?v=Yi64fCT3MXE', '빨간 맛': 'https://www.youtube.com/watch?v=bUwHblpMX1M',
-                                '딩가딩가':'https://www.youtube.com/watch?v=LzmdGtzby2s', '상상더하기':'https://www.youtube.com/watch?v=45g57Fyl7yI', '마지막처럼':'https://www.youtube.com/watch?v=Amq-qlqbjYA'}
-                    angry_music = {'그건 니 생각이고':'https://www.youtube.com/watch?v=bCMTgsFnc30', '대취타': 'https://www.youtube.com/watch?v=afMCpA6p-NE', '내가 제일 잘나가':'https://www.youtube.com/watch?v=rrZxGvUSeAE',
-                                    '보여줄게':'https://www.youtube.com/watch?v=WmGY3gLQ2x0', '닥쳐줘요':'https://www.youtube.com/watch?v=ZAo0DfLlUCo'}
-                    unrest_music = {'혼자라고 생각말기':'https://www.youtube.com/watch?v=i4a4YDvceYA', '괜찮아요':'https://www.youtube.com/watch?v=4nSOi9AXqXU', '마음을 드려요':'https://www.youtube.com/watch?v=MUSaT2B7Lt8',
-                                    '아프지 말고 아르지 말자':'https://www.youtube.com/watch?v=Jh1YtrC_mh0', '도망가자':'https://www.youtube.com/watch?v=D0l1HdemykU'}
-                    embar_music = {'밤편지':'https://www.youtube.com/watch?v=PDzTt2YfFME', '양화대교':'https://www.youtube.com/watch?v=FEUqZSZVHlc', '무릎':'https://www.youtube.com/watch?v=SfeaTW4bcAw',
-                                    '서울의 잠 못 이루는 밤':'https://www.youtube.com/watch?v=zQY1vymt7Co', '밝게 빛나는 별이 되어 비춰줄게':'https://www.youtube.com/watch?v=5YQww_vbNTU'}'''
 
                     test_eval = []
                     for i in out:
@@ -128,6 +117,7 @@ class Emotion:
                             test_eval.append("행복하시군요 ")
                         elif np.argmax(logits) == 4:
                             test_eval.append("슬프시군요 ")
+
                     res = ""
                     '''if test_eval[0] == "행복하시군요 ":
                         res = '행복한 기분을 위해 ' + random.choice(happy_music) + " 를 들려드릴게요"'''
@@ -141,9 +131,13 @@ class Emotion:
                         res = '불안한 기분을 위해 ' + random.choice(unrest_music) + " 를 들려드릴게요"
                     elif test_eval[0] == "당황스러우셨군요 ":
                         res = '당황스러운 기분을 위해 ' + random.choice(embar_music) + " 를 들려드릴게요"
+
                     print("mibot > " + f'{res}')
                     Tts.run(input_text=res)
-                    #playsound('music_mp3/na.mp3')
+                    if test_eval[0] == "행복하시군요 ":
+                        playsound('music_mp3/nabillera.mp3')
+                    elif test_eval[0] == "슬프시군요 ":
+                        playsound('music_mp3/adult.mp3')
                 break
 
 if __name__ == '__main__':
