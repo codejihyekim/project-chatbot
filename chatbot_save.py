@@ -15,13 +15,12 @@ class Kogpt:
         self.MASK = '<unused0>'
         self.SENT = '<unused1>'
         self.PAD = '<pad>'
-        self.epoch = 30
+        self.epoch = 70
         self.Sneg = -1e18
         self.log_interval = 200
         self.device = torch.device('cuda:0')
 
     def hook(self):
-        self.train()
         self.save_model()
 
     def crawling(self):
@@ -60,6 +59,7 @@ class Kogpt:
         learning_rate = 3e-5
         criterion = torch.nn.CrossEntropyLoss(reduction="none")
         optimizer = torch.optim.Adam(model.parameters(), lr=learning_rate)
+
         print("start")
         for epoch in range(self.epoch):
             train_acc = 0.0
@@ -80,13 +80,13 @@ class Kogpt:
                 # 학습 끝
                 optimizer.step()
                 if batch_idx % self.log_interval == 0:
-                    print("epoch {} batch id {}0: loss {} ".format(epoch+1, batch_idx+1, avg_loss))
+                    print("epoch {} batch id {}0: ".format(epoch+1, batch_idx+1))
         print("end")
         return model
 
     def save_model(self):
         model = self.train()
-        PATH = './save/test.pt'
+        PATH = './save/chatbot5.pt'
         torch.save(model, PATH)
 
 if __name__ == '__main__':

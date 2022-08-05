@@ -23,12 +23,12 @@ class Chatbot:
         SENT = self.SENT
         A_TKN = self.A_TKN
         BOS = self.BOS
-        EOS = self.BOS
+        EOS = self.EOS
         PAD = self.PAD 
         MASK = self.MASK
         device = torch.device("cpu")
         koGPT2_TOKENIZER = PreTrainedTokenizerFast.from_pretrained("skt/kogpt2-base-v2", bos_token=BOS, eos_token=EOS, unk_token="<unk>", pad_token=PAD, mask_token=MASK)
-        model = torch.load(f'{self.model_path}/chatbot1.pt', map_location=device)
+        model = torch.load(f'{self.model_path}/chatbot.pt', map_location=device)
         with torch.no_grad():
             intro = "안녕하세요 저는 미봇이에요"
             print(f"mibot > {intro}")

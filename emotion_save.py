@@ -7,7 +7,7 @@ import torch.optim as optim
 from torch.utils.data import Dataset, DataLoader
 import gluonnlp as nlp
 import numpy as np
-from tqdm import tqdm, tqdm_notebook
+from tqdm.notebook import tqdm
 import random
 #kobert
 from kobert.utils import get_tokenizer
@@ -39,11 +39,11 @@ class Bert:
         self.loss_fn = nn.CrossEntropyLoss()
 
     def hook(self):
-        self.model_train()
         self.save_model()
 
     def preprocessing(self):
         chatbot_data = pd.read_excel('./data/감성대화말뭉치(원시데이터)_Validation.xlsx')
+
         chatbot_data.loc[(chatbot_data['Emotion'] == "당황"), 'Emotion'] = 0  # 당황 => 0
         chatbot_data.loc[(chatbot_data['Emotion'] == "분노"), 'Emotion'] = 1  # 분노 => 1
         chatbot_data.loc[(chatbot_data['Emotion'] == "불안"), 'Emotion'] = 2  # 불안 => 2
@@ -68,7 +68,7 @@ class Bert:
 
     def train_data(self):
         # 토큰화
-        data_train = BERTDataset(self.dataset_train, 0, 1, self.tok, self.max_len, True, False)  # dataset, sent_idx, label_idx, bert_tokenizer, max_len, pad, pair 순서
+        data_train = BERTDataset(self.dataset_train, 0, 1, self.tok, self.max_len, True, False)
         train_dataloader = torch.utils.data.DataLoader(data_train, batch_size=self.batch_size, num_workers=0)
         return train_dataloader
 
@@ -110,7 +110,7 @@ class Bert:
             test_acc = 0.0
             model.train()
             device = self.device
-            for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(tqdm_notebook(self.train_data())):
+            for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(tqdm(self.train_data())):
                 optimizer.zero_grad()
                 token_ids = token_ids.long().to(device)
                 segment_ids = segment_ids.long().to(device)
@@ -130,7 +130,7 @@ class Bert:
             print("epoch {} train acc {}".format(e + 1, train_acc / (batch_id + 1)))
 
             model.eval()
-            for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(tqdm_notebook(self.test_data())):
+            for batch_id, (token_ids, valid_length, segment_ids, label) in enumerate(tqdm(self.test_data())):
                 token_ids = token_ids.long().to(device)
                 segment_ids = segment_ids.long().to(device)
                 valid_length = valid_length
@@ -142,7 +142,7 @@ class Bert:
 
     def save_model(self):
         model = self.model_train()
-        torch.save(model, './save/chatbot.pt')
+        torch.save(model, './save/emotion30.pt')
 
 if __name__ == '__main__':
     Bert().hook()

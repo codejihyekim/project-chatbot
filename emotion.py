@@ -35,7 +35,8 @@ class BERTClassifier(nn.Module):
     def forward(self, token_ids, valid_length, segment_ids):
         attention_mask = self.gen_attention_mask(token_ids, valid_length)
         
-        _, pooler = self.bert(input_ids = token_ids, token_type_ids = segment_ids.long(), attention_mask = attention_mask.float().to(token_ids.device))
+        _, pooler = self.bert(input_ids=token_ids, token_type_ids=segment_ids.long(),
+                              attention_mask=attention_mask.float().to(token_ids.device))
         if self.dr_rate:
             out = self.dropout(pooler)
         return self.classifier(out)
@@ -59,6 +60,7 @@ class Emotion:
     def __init__(self):
         self.file = 'music_mp3'
 
+
     def music(self):
         max_len = 100
         batch_size = 16
@@ -66,7 +68,6 @@ class Emotion:
         tokenizer = get_tokenizer()
         tok = nlp.data.BERTSPTokenizer(tokenizer, vocab, lower=False)
         device = torch.device("cuda:0")
-
         with torch.no_grad():
             end = 1
             while end == 1:
@@ -133,10 +134,10 @@ class Emotion:
                     print("mibot > " + f'{res}')
                     Tts.run(input_text=res)
                     if test_eval[0] == "행복하시군요 ":
-                        playsound('music_mp3/nabillera.mp3')
+                        playsound(f'{self.file}/nabillera.mp3')
                         print('음악이 재생 되는 중')
                     elif test_eval[0] == "슬프시군요 ":
-                        playsound('music_mp3/adult.mp3')
+                        playsound(f'{self.file}/adult.mp3')
                         print('음악이 재생 되는 중')
                 break
 
