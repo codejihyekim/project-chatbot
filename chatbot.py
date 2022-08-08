@@ -39,7 +39,7 @@ class Chatbot:
                 text = f"나 > {q}".strip()
                 print(text)
                 if q == "대화 종료" or q == "종료":
-                    end_text = "당신은 충분히 잘 하고 있어요 남은 하루도 행복하게 보내길 바래요"
+                    end_text = "당신은 충분히 잘 하고 있어요, 남은 하루도 행복하게 보내길 바래요"
                     print(f"mibot > {end_text}")
                     Tts.run(input_text=end_text)
                     break
